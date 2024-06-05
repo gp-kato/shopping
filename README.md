@@ -1,1 +1,1 @@
-# gp_laravel-board
+# laravel-shopping
