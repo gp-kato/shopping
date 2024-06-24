@@ -17,3 +17,23 @@ use App\Http\Controllers\Kart;
 Route::get('/', function () {
     return view('products');
 });
+
+Route::get('/2', function () {
+    return view('products2');
+});
+
+Route::get('/index', function () {
+    return view('index');
+});
+
+Route::get('/company', function () {
+    return view('company');
+});
+
+Route::get('/about', function () {
+    return view('about');
+});
+
+Route::get('/item{item}', function () {
+    return view('item{item}');
+});
