@@ -18,9 +18,9 @@
 
             <nav id="navi">
                 <ul class="nav-menu">
-                    <li><a href="products.html">PRODUCTS</a></li>
-                    <li><a href="about.html">ABOUT</a></li>
-                    <li><a href="company.html">COMPANY</a></li>
+                    <li><a href="products">PRODUCTS</a></li>
+                    <li><a href="about">ABOUT</a></li>
+                    <li><a href="company">COMPANY</a></li>
                     <li><a href="mailto:xxxxx@xxx.xxx?subject=お問い合わせ">CONTACT</a></li>
                 </ul>
             </nav>
@@ -34,11 +34,7 @@
         </header>
 
         <main>
-            <div class="content wrapper">
-                <h1 class="page-title">@yield('header')</h1>
-
-                @yield('content')
-            </div>
+            @yield('content')
         </main>
 
         <footer id="footer" class="wrapper">
