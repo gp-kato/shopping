@@ -9,7 +9,7 @@ use App\Models\Product;
 class ProductController extends Controller
 {
     public function index () {
-        $products = Item::all(); // すべての製品を取得
+        $products = Product::all(); // すべての製品を取得
         return view('products', ['products' => $products]); // ビューに製品データを渡す
     }
 
