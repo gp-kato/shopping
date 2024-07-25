@@ -16,10 +16,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/test', function() {
-    return phpinfo();
-});
-
 Route::get('/', [ProductController::class, 'index'])->name('index');
 
 Route::get('/index', function () {

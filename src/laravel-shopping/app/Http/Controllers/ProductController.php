@@ -9,11 +9,11 @@ use App\Models\Product;
 class ProductController extends Controller
 {
     public function index () {
-        $products = Product::all(); // すべての製品を取得
+        $products = Product::paginate(12); // 1ページあたり12個の製品を取得
         return view('products', ['products' => $products]); // ビューに製品データを渡す
     }
 
-    public function item(Item $item, $slug)
+    public function show(Item $item, $slug)
     {
         return view('item', compact('item', 'slug'));
     }    
