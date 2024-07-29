@@ -10,7 +10,9 @@ class ProductController extends Controller
 {
     public function index () {
         $products = Product::paginate(12); // 1ページあたり12個の製品を取得
-        return view('products', ['products' => $products]); // ビューに製品データを渡す
+        $current_page = request()->query('page', 1); // 現在のページのURLを取得
+        $total_pages = $products->lastPage(); // 総ページ数を取得
+        return view('products', ['products' => $products, 'current_page' => $current_page, 'total_pages' => $total_pages]); // ビューに製品データを渡す
     }
 
     public function show(Item $item, $slug)

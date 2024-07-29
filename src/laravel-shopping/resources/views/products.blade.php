@@ -17,8 +17,15 @@
             @endforeach
         </ul>
         <ul class="pagination">
-          <li>1</li>
-          <li>2</li>
+            @for ($i = 1; $i <= $total_pages; $i++)
+                <li>
+                    @if ($i == $current_page)
+                        <p>{{ $i }}</p> <!-- 現在のページにリンクしない -->
+                    @else
+                        <a href="?page={{ $i }}">{{ $i }}</a>
+                    @endif
+                </li>
+            @endfor
         </ul>
     </div>
 @endsection

@@ -29,6 +29,7 @@
           <dt>MATERIAL：</dt>
           <dd>テキストテキストテキスト</dd>
         </dl>
+        <button class="add-to-cart">カートに追加</button>
       </div>
     </div>
     <a class="link-text" href="/">Back To Products</a>
