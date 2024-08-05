@@ -15,8 +15,28 @@ class ProductController extends Controller
         return view('products', ['products' => $products, 'current_page' => $current_page, 'total_pages' => $total_pages]); // ビューに製品データを渡す
     }
 
-    public function show(Item $item, $slug)
-    {
-        return view('item', compact('item', 'slug'));
+    public function product() {
+        return view('index');
+    }
+
+    public function company() {
+        return view('company');
+    }
+
+    public function about() {
+        return view('about');
+    }
+
+    public function show(Item $item, $slug) {
+        $product = $item; // $productという変数を定義
+
+        $data = [
+            'id' => $product->id,
+            'name' => $product->name,
+            'price' => $product->price,
+            'session_quantity' => $product->quantity,
+        ];
+            
+        return view('item', compact('product', 'slug'));
     }    
 }

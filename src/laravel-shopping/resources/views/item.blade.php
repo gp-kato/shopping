@@ -29,7 +29,18 @@
           <dt>MATERIAL：</dt>
           <dd>テキストテキストテキスト</dd>
         </dl>
-        <button class="add-to-cart">カートに追加</button>
+        <p>{{ $product->id }}</p>
+
+        <p>{{ $product->name }}</p>
+
+        <p>{{ $product->price }}</p>
+        <form method="post" action="{{ route('add') }}">
+          @csrf
+          <input type="hidden" name="id" value="{{ $product->id }}">
+          <input type="hidden" name="name" value="{{ $product->name }}">
+          <input type="hidden" name="price" value="{{ $product->price }}">
+          <button class="add-to-cart">カートに追加</button>
+        </form>
       </div>
     </div>
     <a class="link-text" href="/">Back To Products</a>

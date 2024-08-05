@@ -18,19 +18,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ProductController::class, 'index'])->name('index');
 
-Route::get('/index', function () {
-    return view('index');
-});
+Route::get('/index', [ProductController::class, 'product'])->name('product');
 
-Route::get('/company', function () {
-    return view('company');
-});
+Route::get('/company', [ProductController::class, 'company'])->name('company');
 
-Route::get('/about', function () {
-    return view('about');
-});
+Route::get('/about', [ProductController::class, 'about'])->name('about');
 
 Route::get('/item/{product}', [ProductController::class, 'show'])->name('show');
+Route::post('/add', [CartController::class, 'add'])->name('add');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
