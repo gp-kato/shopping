@@ -9,8 +9,13 @@ use App\Models\Item;
 class CartController extends Controller
 {
     public function add(Request $request) {
-        $cartData = $request->session()->get('session_data', []);
-        dd($cartData);
+        $data = [
+            'id' => $request->id,
+            'name' => $request->name,
+            'price' => $request->price,
+            'session_quantity' => $request->quantity,
+        ];
+        $cartData = $request->session()->put('session_data', $data);
         return view('cart', compact('cartData'));
     }
 }

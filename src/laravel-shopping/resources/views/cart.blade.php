@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', 'Furniture Design')
+@section('title', 'Cart | Furniture Design')
 
 @section('content')
     @if(!is_null($cartData))
