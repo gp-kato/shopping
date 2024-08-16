@@ -29,14 +29,7 @@ class ProductController extends Controller
 
     public function show(Item $item, $slug) {
         $product = $item; // $productという変数を定義
-
-        $data = [
-            'id' => $product->id,
-            'name' => $product->name,
-            'price' => $product->price,
-            'session_quantity' => $product->quantity,
-        ];
-            
-        return view('item', compact('product', 'slug'));
+        $products = Product::paginate(1); // 1ページあたり1個の製品を取得
+        return view('item', compact('products', 'product', 'slug'));
     }    
 }
