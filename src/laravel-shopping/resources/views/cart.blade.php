@@ -16,6 +16,11 @@
                         </span>
                         個
                         ¥{{ number_format($data['session_quantity'] * $data['price']) }}
+                        <form method="post" action="{{ route('remove') }}">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $data['id'] }}">
+                            <button type="submit">削除</button>
+                        </form>
                     </section>
                 @endforeach
             @else
