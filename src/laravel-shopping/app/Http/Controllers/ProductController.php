@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Item;
 use App\Models\Product;
 
 class ProductController extends Controller
@@ -16,7 +15,8 @@ class ProductController extends Controller
     }
 
     public function product() {
-        return view('index');
+        $products = Product::paginate(8); // 1ページあたり12個の製品を取得
+        return view('index', ['products' => $products]);
     }
 
     public function company() {
@@ -27,9 +27,7 @@ class ProductController extends Controller
         return view('about');
     }
 
-    public function show(Item $item, $slug) {
-        $product = $item; // $productという変数を定義
-        $products = Product::paginate(1); // 1ページあたり1個の製品を取得
-        return view('item', compact('products', 'product', 'slug'));
-    }    
+    public function show(Product $product) {
+        return view('item', ['product' => $product]);
+    }
 }

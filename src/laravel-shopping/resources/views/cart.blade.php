@@ -10,7 +10,7 @@
                     <section>
                         <img src="{{asset('img/item' . $data['id'] . '.jpg')}}">
                         {{ $data['name'] }}
-                        ¥{{ number_format($data['price']) }} 円
+                        ¥{{ number_format($data['price']) }} 円 +tax
                         <span>
                             {{ $data['session_quantity'] }}
                         </span>

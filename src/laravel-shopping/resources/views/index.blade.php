@@ -5,16 +5,16 @@
 @section('content')
     <div id="top" class="wrapper">
         <ul class="product-list">
-            @foreach(range(1, 8) as $item)
+            @foreach($products as $product)
                 <li>
-                    <a href="item{{ $item }}">
-                        <img src="{{asset('img/item' . $item . '.jpg')}}">
-                        <p>プロダクトタイトルプロダクトタイトル</p>
-                        <p>¥99,999 +tax</p>
+                <a href="{{ url('item/' . $product->id) }}">
+                        <img src="{{asset('img/item' . $product->id . '.jpg')}}">
+                        <p>{{ $product->name }}</p>
+                        <p>¥{{ number_format($product->price) }} +tax</p>
                     </a>
                 </li>
             @endforeach
         </ul>
-        <a class="link-text" href="products">View More</a>
+        <a class="link-text" href="/">View More</a>
     </div>
 @endsection

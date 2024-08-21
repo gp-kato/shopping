@@ -13,15 +13,15 @@
     <body>
         <header id="header" class="wrapper">
             <div class="site-title">
-                <a href="index"><img src="{{asset('img/logo.svg')}}" alt="Furniture Design"></a>
+                <a href="/index"><img src="{{asset('img/logo.svg')}}" alt="Furniture Design"></a>
             </div>
 
             <nav id="navi">
                 <ul class="nav-menu">
-                    <li><a href="products">PRODUCTS</a></li>
-                    <li><a href="about">ABOUT</a></li>
-                    <li><a href="company">COMPANY</a></li>
-                    <li><a href="mailto:xxxxx@xxx.xxx?subject=お問い合わせ">CONTACT</a></li>
+                    <li><a href="/products">PRODUCTS</a></li>
+                    <li><a href="/about">ABOUT</a></li>
+                    <li><a href="/company">COMPANY</a></li>
+                    <li><a href="/mailto:xxxxx@xxx.xxx?subject=お問い合わせ">CONTACT</a></li>
                 </ul>
             </nav>
 
