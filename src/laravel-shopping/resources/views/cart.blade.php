@@ -5,7 +5,7 @@
 @section('content')
     <div class="content wrapper">
         <ul class="product-list">
-            @if(!is_null($sessionData))
+            @if(!empty($sessionData))
                 @foreach($sessionData as $data)
                     <section>
                         <img src="{{asset('img/item' . $data['id'] . '.jpg')}}">
@@ -23,6 +23,10 @@
                         </form>
                     </section>
                 @endforeach
+                <form method="post" action="{{ route('purchase') }}">
+                    @csrf
+                    <button type="submit">購入</button>
+                </form>
             @else
                 <p>カートに商品がありません。</p>
             @endif

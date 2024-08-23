@@ -27,6 +27,7 @@ Route::get('/about', [ProductController::class, 'about'])->name('about');
 Route::get('/item/{product}', [ProductController::class, 'show'])->name('show');
 Route::post('/add', [CartController::class, 'add'])->name('add');
 Route::post('/remove', [CartController::class, 'remove'])->name('remove');
+Route::post('/purchase', [CartController::class, 'purchase'])->name('purchase');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

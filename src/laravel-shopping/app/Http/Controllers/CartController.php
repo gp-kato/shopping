@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PurchaseConfirmation;
 use App\Models\Product;
 
 class CartController extends Controller
@@ -49,4 +51,14 @@ class CartController extends Controller
     
         return view('cart', compact('sessionData'));
     }    
+
+    public function purchase(Request $request)
+    {
+        // Handle the purchase logic here
+    
+        // Send email notification
+        Mail::to('customer@example.com')->send(new PurchaseConfirmation());
+    
+        return redirect()->route('cart')->with('success', 'Purchase completed and email sent!');
+    }
 }
