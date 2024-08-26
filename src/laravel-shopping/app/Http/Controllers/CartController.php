@@ -59,6 +59,6 @@ class CartController extends Controller
         // Send email notification
         Mail::to('customer@example.com')->send(new PurchaseConfirmation());
     
-        return redirect()->route('cart')->with('success', 'Purchase completed and email sent!');
+        return redirect()->route('product');
     }
 }

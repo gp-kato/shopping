@@ -25,18 +25,11 @@ Route::get('/company', [ProductController::class, 'company'])->name('company');
 Route::get('/about', [ProductController::class, 'about'])->name('about');
 
 Route::get('/item/{product}', [ProductController::class, 'show'])->name('show');
-Route::post('/add', [CartController::class, 'add'])->name('add');
-Route::post('/remove', [CartController::class, 'remove'])->name('remove');
-Route::post('/purchase', [CartController::class, 'purchase'])->name('purchase');
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/add', [CartController::class, 'add'])->name('add');
+    Route::post('/remove', [CartController::class, 'remove'])->name('remove');
+    Route::post('/purchase', [CartController::class, 'purchase'])->name('purchase');    
 });
 
 require __DIR__.'/auth.php';
