@@ -25,6 +25,11 @@
                 @endforeach
                 <form method="post" action="{{ route('purchase') }}">
                     @csrf
+                        @foreach($sessionData as $data)
+                            <input type="hidden" name="items[{{ $data['id'] }}][name]" value="{{ $data['name'] }}">
+                            <input type="hidden" name="items[{{ $data['id'] }}][price]" value="{{ $data['price'] }}">
+                            <input type="hidden" name="items[{{ $data['id'] }}][quantity]" value="{{ $data['session_quantity'] }}">
+                        @endforeach
                     <button type="submit">購入</button>
                 </form>
             @else

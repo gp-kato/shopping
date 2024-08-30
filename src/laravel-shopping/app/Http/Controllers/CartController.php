@@ -9,16 +9,9 @@ use App\Models\Product;
 
 class CartController extends Controller
 {
-    public function add(Request $request) {
-        $data = [
-            'id' => $request->id,
-            'name' => $request->name,
-            'price' => $request->price,
-            'session_quantity' => $request->quantity,
-        ];
-    
+    private function updateSessionData(Request $request, $data) {
         $sessionData = $request->session()->get('session_data', []);
-        
+
         $found = false;
         foreach ($sessionData as &$item) {
             if ($item['id'] == $data['id']) {
@@ -27,13 +20,26 @@ class CartController extends Controller
                 break;
             }
         }
-        
+
         if (!$found) {
             $sessionData[] = $data;
         }
-    
+
         $request->session()->put('session_data', $sessionData);
-        
+
+        return $sessionData;
+    }
+
+    public function add(Request $request) {
+        $data = [
+            'id' => $request->id,
+            'name' => $request->name,
+            'price' => $request->price,
+            'session_quantity' => $request->quantity,
+        ];
+
+        $sessionData = $this->updateSessionData($request, $data);
+
         return view('cart', compact('sessionData'));
     }
 
@@ -52,13 +58,25 @@ class CartController extends Controller
         return view('cart', compact('sessionData'));
     }    
 
-    public function purchase(Request $request)
-    {
-        // Handle the purchase logic here
-    
+    public function purchase(Request $request) {
+        $data = [
+            'id' => $request->id,
+            'name' => $request->name,
+            'price' => $request->price,
+            'session_quantity' => $request->quantity,
+        ];
+
+        $sessionData = $this->updateSessionData($request, $data);
+
         // Send email notification
-        Mail::to('customer@example.com')->send(new PurchaseConfirmation());
-    
-        return redirect()->route('product');
+        $userEmail = $request->user()->email; // Assuming the user is authenticated
+        Mail::send('emails.purchase_confirmation', ['sessionData' => $sessionData], function ($message) use ($userEmail) {
+            $message->to($userEmail)
+            ->subject('Your Cart Contents');
+        });
+
+        $request->session()->forget('session_data');
+
+        return redirect()->route('product')->with('sessionData', $sessionData);
     }
 }
