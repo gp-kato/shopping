@@ -27,8 +27,10 @@ Route::get('/about', [ProductController::class, 'about'])->name('about');
 Route::get('/item/{product}', [ProductController::class, 'show'])->name('show');
 
 Route::middleware('auth')->group(function () {
-    Route::post('/add', [CartController::class, 'add'])->name('add');
-    Route::post('/remove', [CartController::class, 'remove'])->name('remove');
+    Route::get('/cart', [CartController::class, 'cart'])->name('cart');
+    // ルートのURLは統一してRouteのmethodで区別させる(get,post,delete)
+    Route::post('/cart', [CartController::class, 'add'])->name('add');
+    Route::delete('/cart', [CartController::class, 'remove'])->name('remove');
     Route::post('/purchase', [CartController::class, 'purchase'])->name('purchase');    
 });
 

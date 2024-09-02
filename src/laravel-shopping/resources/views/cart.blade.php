@@ -7,21 +7,23 @@
         <ul class="product-list">
             @if(!empty($sessionData))
                 @foreach($sessionData as $data)
-                    <section>
-                        <img src="{{asset('img/item' . $data['id'] . '.jpg')}}">
-                        {{ $data['name'] }}
-                        ¥{{ number_format($data['price']) }} 円 +tax
-                        <span>
-                            {{ $data['session_quantity'] }}
-                        </span>
-                        個
-                        ¥{{ number_format($data['session_quantity'] * $data['price']) }}
-                        <form method="post" action="{{ route('remove') }}">
-                            @csrf
-                            <input type="hidden" name="id" value="{{ $data['id'] }}">
-                            <button type="submit">削除</button>
-                        </form>
-                    </section>
+                    @if(!empty($data['id']) && !empty($data['name']) && !empty($data['price']) && !empty($data['session_quantity']))
+                        <section>
+                            <img src="{{asset('img/item' . $data['id'] . '.jpg')}}">
+                            {{ $data['name'] }}
+                            ¥{{ number_format($data['price']) }} 円 +tax
+                            <span>
+                                {{ $data['session_quantity'] }}
+                            </span>
+                            個
+                            ¥{{ number_format($data['session_quantity'] * $data['price']) }}
+                            <form method="post" action="{{ route('remove') }}">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $data['id'] }}">
+                                <button type="submit">削除</button>
+                            </form>
+                        </section>
+                    @endif
                 @endforeach
                 <form method="post" action="{{ route('purchase') }}">
                     @csrf

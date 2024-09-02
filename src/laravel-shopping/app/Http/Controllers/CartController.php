@@ -30,6 +30,19 @@ class CartController extends Controller
         return $sessionData;
     }
 
+    public function cart(Request $request) {
+        $data = [
+            'id' => $request->id,
+            'name' => $request->name,
+            'price' => $request->price,
+            'session_quantity' => $request->quantity,
+        ];
+
+        $sessionData = $this->updateSessionData($request, $data);
+
+        return view('cart', compact('sessionData'));
+    }
+
     public function add(Request $request) {
         $data = [
             'id' => $request->id,
