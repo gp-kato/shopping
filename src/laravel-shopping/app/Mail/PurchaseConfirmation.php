@@ -16,17 +16,19 @@ class PurchaseConfirmation extends Mailable
     public function build()
     {
         return $this->view('emails.purchase_confirmation')
-        ->subject('Purchase Confirmation');
+        ->with('sessionData', $this->sessionData);
     }
+
+    public $sessionData;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($sessionData)
     {
-        //
+        $this->sessionData = $sessionData;
     }
 
     /**

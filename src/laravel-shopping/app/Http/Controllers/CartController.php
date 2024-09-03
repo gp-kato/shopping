@@ -83,10 +83,7 @@ class CartController extends Controller
 
         // Send email notification
         $userEmail = $request->user()->email; // Assuming the user is authenticated
-        Mail::send('emails.purchase_confirmation', ['sessionData' => $sessionData], function ($message) use ($userEmail) {
-            $message->to($userEmail)
-            ->subject('Your Cart Contents');
-        });
+        Mail::to($userEmail)->send(new PurchaseConfirmation($sessionData));
 
         $request->session()->forget('session_data');
 
