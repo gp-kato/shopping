@@ -9,9 +9,76 @@ use App\Models\Product;
 
 class CartController extends Controller
 {
-    private function updateSessionData(Request $request, $data) {
-        $sessionData = $request->session()->get('session_data', []);
+    public function __construct(Mail $mail)
+    {
+        $this->mail = $mail;
+    }
 
+    public function cart(Request $request): \Illuminate\View\View
+    {
+        $sessionData = $this->getSessionData($request);
+
+        return view('cart', compact('sessionData'));
+    }
+
+    public function add(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $data = $this->getRequestData($request);
+        $sessionData = $this->getSessionData($request);
+
+        $sessionData = $this->updateSessionData($sessionData, $data);
+
+        $request->session()->put('session_data', $sessionData);
+
+        return redirect()->route('cart');
+    }
+
+    public function remove(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $sessionData = $this->getSessionData($request);
+
+        foreach ($sessionData as $key => $item) {
+            if ($item['id'] == $request->id) {
+                unset($sessionData[$key]);
+                break;
+            }
+        }
+
+        $request->session()->put('session_data', $sessionData);
+
+        return redirect()->route('cart');
+    }
+
+    public function purchase(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $sessionData = $this->getSessionData($request);
+
+        // Send email notification
+        $userEmail = $request->user()->email; // Assuming the user is authenticated
+        $this->mail::to($userEmail)->send(new PurchaseConfirmation($sessionData));
+
+        $request->session()->forget('session_data');
+
+        return redirect()->route('product')->with('sessionData', $sessionData);
+    }
+
+    private function getSessionData(Request $request): array
+    {
+        return $request->session()->get('session_data', []);
+    }
+
+    private function getRequestData(Request $request): array
+    {
+        return [
+            'id' => $request->id,
+            'name' => $request->name,
+            'price' => $request->price,
+            'session_quantity' => $request->quantity,
+        ];
+    }
+
+    private function updateSessionData(array $sessionData, array $data): array
+    {
         $found = false;
         foreach ($sessionData as &$item) {
             if ($item['id'] == $data['id']) {
@@ -25,68 +92,6 @@ class CartController extends Controller
             $sessionData[] = $data;
         }
 
-        $request->session()->put('session_data', $sessionData);
-
         return $sessionData;
-    }
-
-    public function cart(Request $request) {
-        $data = [
-            'id' => $request->id,
-            'name' => $request->name,
-            'price' => $request->price,
-            'session_quantity' => $request->quantity,
-        ];
-
-        $sessionData = $this->updateSessionData($request, $data);
-
-        return view('cart', compact('sessionData'));
-    }
-
-    public function add(Request $request) {
-        $data = [
-            'id' => $request->id,
-            'name' => $request->name,
-            'price' => $request->price,
-            'session_quantity' => $request->quantity,
-        ];
-
-        $sessionData = $this->updateSessionData($request, $data);
-
-        return view('cart', compact('sessionData'));
-    }
-
-    public function remove(Request $request) {
-        $sessionData = $request->session()->get('session_data', []);
-        
-        foreach ($sessionData as $key => $item) {
-            if ($item['id'] == $request->id) {
-                unset($sessionData[$key]);
-                break;
-            }
-        }
-    
-        $request->session()->put('session_data', $sessionData);
-    
-        return view('cart', compact('sessionData'));
-    }    
-
-    public function purchase(Request $request) {
-        $data = [
-            'id' => $request->id,
-            'name' => $request->name,
-            'price' => $request->price,
-            'session_quantity' => $request->quantity,
-        ];
-
-        $sessionData = $this->updateSessionData($request, $data);
-
-        // Send email notification
-        $userEmail = $request->user()->email; // Assuming the user is authenticated
-        Mail::to($userEmail)->send(new PurchaseConfirmation($sessionData));
-
-        $request->session()->forget('session_data');
-
-        return redirect()->route('product')->with('sessionData', $sessionData);
     }
 }

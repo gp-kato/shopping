@@ -18,6 +18,7 @@
                             個
                             ¥{{ number_format($data['session_quantity'] * $data['price']) }}
                             <form method="post" action="{{ route('remove') }}">
+                                @method('delete')
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $data['id'] }}">
                                 <button type="submit">削除</button>

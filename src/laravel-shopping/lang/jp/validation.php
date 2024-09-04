@@ -14,12 +14,12 @@ return [
     */
 
     'accepted' => ':attributeを承認してください。',
-    'accepted_if' => 'The :attribute must be accepted when :other is :value.',
-    'active_url' => 'The :attribute is not a valid URL.',
-    'after' => 'The :attribute must be a date after :date.',
-    'after_or_equal' => 'The :attribute must be a date after or equal to :date.',
-    'alpha' => 'The :attribute must only contain letters.',
-    'alpha_dash' => 'The :attribute must only contain letters, numbers, dashes and underscores.',
+    'accepted_if' => ':other が :value の場合、:attribute は承認されなければなりません。',
+    'active_url' => ':attributeは正しいURLではありません。',
+    'after' => ':attribute は :date 以降の日付でなければなりません。',
+    'after_or_equal' => ':attribute は :date 以降または同日の日付でなければなりません。',
+    'alpha' => ':attribute は文字のみを含む必要があります。',
+    'alpha_dash' => ':attribute は文字、数字、ダッシュ、アンダースコアのみを含む必要があります。',
     'alpha_num' => 'The :attribute must only contain letters and numbers.',
     'array' => 'The :attribute must be an array.',
     'ascii' => 'The :attribute must only contain single-byte alphanumeric characters and symbols.',
