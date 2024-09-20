@@ -9,45 +9,45 @@ use App\Models\Product;
 
 class CartController extends Controller
 {
-    public function cart(Request $request): \Illuminate\View\View {
-        $sessionData = $this->getSessionData($request);
+    public function cart(Request $request, Product $product) {
+        $sessionData = $this->getSessionData($product);
 
-        return view('cart', compact('sessionData'));
+        return view('cart', compact('sessionData', 'product'));
     }
 
-    public function add(Request $request): \Illuminate\Http\RedirectResponse {
+    public function add(Request $request, Product $product) {
         $data = [
-            'id' => $request->id,
-            'name' => $request->name,
-            'price' => $request->price,
-            'session_quantity' => $request->quantity,
+            'id' => $product->id,
+            'path' => $product->path,
+            'name' => $product->name,
+            'price' => $product->price,
+            'quantity' => $request->quantity,
         ];
-        $sessionData = $this->getSessionData($request);
-
+    
+        $sessionData = $this->getSessionData($product);
         $sessionData = $this->updateSessionData($sessionData, $data);
-
-        $request->session()->put('session_data', $sessionData);
-
+        session()->put('session_data', $sessionData);
+    
         return redirect()->route('cart');
     }
-
-    public function remove(Request $request): \Illuminate\Http\RedirectResponse {
-        $sessionData = $this->getSessionData($request);
+        
+    public function remove(Request $request, Product $product) {
+        $sessionData = $this->getSessionData();
 
         foreach ($sessionData as $key => $item) {
-            if ($item['id'] == $request->id) {
+            if ($item['id'] == $product->id) {
                 unset($sessionData[$key]);
                 break;
             }
         }
 
-        $request->session()->put('session_data', $sessionData);
+        session()->put('session_data', $sessionData);
 
-        return redirect()->route('cart');
+        return redirect()->route('cart', ['product' => $product]);
     }
 
-    public function purchase(Request $request): \Illuminate\Http\RedirectResponse {
-        $sessionData = $this->getSessionData($request);
+    public function purchase(Request $request, Product $product) {
+        $sessionData = $this->getSessionData($product);
 
         // Send email notification
         $userEmail = $request->user()->email; // Assuming the user is authenticated
@@ -58,15 +58,15 @@ class CartController extends Controller
         return redirect()->route('product')->with('sessionData', $sessionData);
     }
 
-    private function getSessionData(Request $request): array {
-        return $request->session()->get('session_data', []);
+    private function getSessionData(): array {
+        return session()->get('session_data', []);
     }
 
     private function updateSessionData(array $sessionData, array $data): array {
         $found = false;
         foreach ($sessionData as &$item) {
-            if ($item['id'] == $data['id']) {
-                $item['session_quantity'] += $data['session_quantity'];
+            if (isset($item['id']) && $item['id'] == $data['id']) {
+                $item['quantity'] += $data['quantity'];
                 $found = true;
                 break;
             }

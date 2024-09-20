@@ -8,7 +8,7 @@
             @foreach($products as $product)
                 <li>
                 <a href="{{ url('item/' . $product->id) }}">
-                        <img src="{{asset('img/item' . $product->id . '.jpg')}}">
+                        <img src="{{asset('img/' . $product->path )}}">
                         <p>{{ $product->name }}</p>
                         <p>¥{{ number_format($product->price) }} +tax</p>
                     </a>

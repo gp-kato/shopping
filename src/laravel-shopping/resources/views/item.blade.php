@@ -8,7 +8,7 @@
         <div id="item">
             @isset($product)
                 <div class="item-img">
-                    <img src="{{ asset('img/item' . $product->id . '.jpg')}}">
+                    <img src="{{ asset('img/' . $product->path )}}">
                 </div>
                 <div class="item-text">
                     <p>
@@ -30,11 +30,8 @@
                         <dt>MATERIAL：</dt>
                         <dd>テキストテキストテキスト</dd>
                     </dl>
-                    <form method="post" action="{{ route('add') }}">
+                    <form method="post" action="{{ route('add', ['product' => $product->id]) }}">
                         @csrf
-                        <input type="hidden" name="id" value="{{ $product->id }}">
-                        <input type="hidden" name="name" value="{{ $product->name }}">
-                        <input type="hidden" name="price" value="{{ $product->price }}">
                         <input type="number" name="quantity" value="1" min="1">
                         <button class="add-to-cart">カートに追加</button>
                     </form>

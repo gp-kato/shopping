@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
@@ -29,8 +28,8 @@ Route::get('/item/{product}', [ProductController::class, 'show'])->name('show');
 Route::middleware('auth')->group(function () {
     Route::get('/cart', [CartController::class, 'cart'])->name('cart');
     // ルートのURLは統一してRouteのmethodで区別させる(get,post,delete)
-    Route::post('/cart', [CartController::class, 'add'])->name('add');
-    Route::delete('/cart', [CartController::class, 'remove'])->name('remove');
+    Route::post('/cart/{product}', [CartController::class, 'add'])->name('add');
+    Route::delete('/cart/{product}', [CartController::class, 'remove'])->name('remove');
     Route::post('/purchase', [CartController::class, 'purchase'])->name('purchase');    
 });
 
