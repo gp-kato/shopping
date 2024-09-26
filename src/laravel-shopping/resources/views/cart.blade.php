@@ -5,10 +5,10 @@
 @section('content')
     <div class="content wrapper">
         <ul class="product-list">
-            @if(!empty($sessionData))
-                @foreach($sessionData as $data)
+            @if(!empty($cartData))
+                @foreach($cartData as $data)
                     <section>
-                        <img src="{{asset('img/' . $data['path'] )}}">
+                        <img src="{{asset($data['path'] )}}">
                         {{ $data['name'] }}
                         ¥{{ number_format($data['price']) }} 円 +tax
                         <span>{{ $data['quantity'] }} 個</span>

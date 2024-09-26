@@ -10,9 +10,9 @@ use App\Models\Product;
 class CartController extends Controller
 {
     public function cart(Request $request, Product $product) {
-        $sessionData = $this->getSessionData($product);
+        $cartData = $this->getCartData($product);
 
-        return view('cart', compact('sessionData', 'product'));
+        return view('cart', compact('cartData', 'product'));
     }
 
     public function add(Request $request, Product $product) {
@@ -24,47 +24,47 @@ class CartController extends Controller
             'quantity' => $request->quantity,
         ];
     
-        $sessionData = $this->getSessionData($product);
-        $sessionData = $this->updateSessionData($sessionData, $data);
-        session()->put('session_data', $sessionData);
+        $cartData = $this->getCartData($product);
+        $cartData = $this->updateCartData($cartData, $data);
+        session()->put('cart_data', $cartData);
     
         return redirect()->route('cart');
     }
         
     public function remove(Request $request, Product $product) {
-        $sessionData = $this->getSessionData();
+        $cartData = $this->getCartData();
 
-        foreach ($sessionData as $key => $item) {
+        foreach ($cartData as $key => $item) {
             if ($item['id'] == $product->id) {
-                unset($sessionData[$key]);
+                unset($cartData[$key]);
                 break;
             }
         }
 
-        session()->put('session_data', $sessionData);
+        session()->put('session_data', $cartData);
 
         return redirect()->route('cart', ['product' => $product]);
     }
 
     public function purchase(Request $request, Product $product) {
-        $sessionData = $this->getSessionData($product);
+        $cartData = $this->getCartData($product);
 
         // Send email notification
         $userEmail = $request->user()->email; // Assuming the user is authenticated
-        Mail::to($userEmail)->send(new PurchaseConfirmation($sessionData));
+        Mail::to($userEmail)->send(new PurchaseConfirmation($cartData));
 
         $request->session()->forget('session_data');
 
-        return redirect()->route('product')->with('sessionData', $sessionData);
+        return redirect()->route('product')->with('cartData', $cartData);
     }
 
-    private function getSessionData(): array {
+    private function getCartData(): array {
         return session()->get('session_data', []);
     }
 
-    private function updateSessionData(array $sessionData, array $data): array {
+    private function updateCartData(array $cartData, array $data): array {
         $found = false;
-        foreach ($sessionData as &$item) {
+        foreach ($cartData as &$item) {
             if (isset($item['id']) && $item['id'] == $data['id']) {
                 $item['quantity'] += $data['quantity'];
                 $found = true;
@@ -73,9 +73,9 @@ class CartController extends Controller
         }
 
         if (!$found) {
-            $sessionData[] = $data;
+            $cartData[] = $data;
         }
 
-        return $sessionData;
+        return $cartData;
     }
 }
