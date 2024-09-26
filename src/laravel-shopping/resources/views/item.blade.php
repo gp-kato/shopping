@@ -8,7 +8,7 @@
         <div id="item">
             @isset($product)
                 <div class="item-img">
-                    <img src="{{ asset('img/' . $product->path )}}">
+                    <img src="{{ asset($product->path )}}">
                 </div>
                 <div class="item-text">
                     <p>

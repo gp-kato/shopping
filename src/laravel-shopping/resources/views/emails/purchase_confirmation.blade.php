@@ -13,7 +13,7 @@
                 @foreach($sessionData as $data)
                     @if(!empty($data['id']) && !empty($data['name']) && !empty($data['price']) && !empty($data['quantity']))
                         <li>
-                            <img src="{{asset('img/' . $data['path'] )}}">
+                            <img src="{{asset($data['path'] )}}">
                             <p>{{ $data['name'] }}</p>
                             <p>¥{{ number_format($data['price']) }} 円 +tax</p>
                             <span>

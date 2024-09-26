@@ -10,7 +10,7 @@ use App\Models\Product;
 class CartController extends Controller
 {
     public function cart(Request $request, Product $product) {
-        $cartData = $this->getCartData($product);
+        $cartData = $this->getSessionData($product);
 
         return view('cart', compact('cartData', 'product'));
     }
@@ -24,15 +24,15 @@ class CartController extends Controller
             'quantity' => $request->quantity,
         ];
     
-        $cartData = $this->getCartData($product);
+        $cartData = $this->getSessionData($product);
         $cartData = $this->updateCartData($cartData, $data);
-        session()->put('cart_data', $cartData);
+        session()->put('session_data', $cartData);
     
         return redirect()->route('cart');
     }
         
     public function remove(Request $request, Product $product) {
-        $cartData = $this->getCartData();
+        $cartData = $this->getSessionData();
 
         foreach ($cartData as $key => $item) {
             if ($item['id'] == $product->id) {
@@ -47,7 +47,7 @@ class CartController extends Controller
     }
 
     public function purchase(Request $request, Product $product) {
-        $cartData = $this->getCartData($product);
+        $cartData = $this->getSessionData($product);
 
         // Send email notification
         $userEmail = $request->user()->email; // Assuming the user is authenticated
@@ -58,7 +58,7 @@ class CartController extends Controller
         return redirect()->route('product')->with('cartData', $cartData);
     }
 
-    private function getCartData(): array {
+    private function getSessionData(): array {
         return session()->get('session_data', []);
     }
 
