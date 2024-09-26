@@ -10,7 +10,7 @@ use App\Models\Product;
 class CartController extends Controller
 {
     public function cart(Request $request, Product $product) {
-        $cartData = $this->getSessionData($product);
+        $cartData = $this->getCartData($product);
 
         return view('cart', compact('cartData', 'product'));
     }
@@ -24,15 +24,15 @@ class CartController extends Controller
             'quantity' => $request->quantity,
         ];
     
-        $cartData = $this->getSessionData($product);
+        $cartData = $this->getcartData($product);
         $cartData = $this->updateCartData($cartData, $data);
-        session()->put('session_data', $cartData);
+        session()->put('cart_data', $cartData);
     
         return redirect()->route('cart');
     }
-        
+
     public function remove(Request $request, Product $product) {
-        $cartData = $this->getSessionData();
+        $cartData = $this->getCartData();
 
         foreach ($cartData as $key => $item) {
             if ($item['id'] == $product->id) {
@@ -41,25 +41,25 @@ class CartController extends Controller
             }
         }
 
-        session()->put('session_data', $cartData);
+        session()->put('cart_data', $cartData);
 
         return redirect()->route('cart', ['product' => $product]);
     }
 
     public function purchase(Request $request, Product $product) {
-        $cartData = $this->getSessionData($product);
+        $cartData = $this->getCartData($product);
 
         // Send email notification
         $userEmail = $request->user()->email; // Assuming the user is authenticated
         Mail::to($userEmail)->send(new PurchaseConfirmation($cartData));
 
-        $request->session()->forget('session_data');
+        $request->session()->forget('cart_data');
 
         return redirect()->route('product')->with('cartData', $cartData);
     }
 
-    private function getSessionData(): array {
-        return session()->get('session_data', []);
+    private function getCartData(): array {
+        return session()->get('cart_data', []);
     }
 
     private function updateCartData(array $cartData, array $data): array {
