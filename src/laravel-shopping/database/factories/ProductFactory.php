@@ -10,6 +10,8 @@ use Illuminate\Support\Str;
  */
 class ProductFactory extends Factory
 {
+    protected static $counter = 17;
+
     /**
      * Define the model's default state.
      *
@@ -18,10 +20,10 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
-            'id'=> $this->faker->unique()->randomNumber(),
-            'path'=> $this->faker->filePath(),
-            'price'=> $this->faker->randomFloat(2, 1, 1000),
+            'name' => 'プロダクトタイトルプロダクトタイトル',
+            'id'=> self::$counter++, // IDを1ずつ増やす
+            'path'=> 'img/' . fake()->unique()->word() . '.jpg', // Pathを1ずつ増やす
+            'price'=> 99999,
         ];
     }
 }
