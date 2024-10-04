@@ -15,8 +15,6 @@ class ProductTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('products')->insert ([
-            //
-        ]);
+        \App\Models\Product::factory(16)->create();
     }
 }

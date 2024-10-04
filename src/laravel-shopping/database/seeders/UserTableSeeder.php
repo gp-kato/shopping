@@ -14,8 +14,6 @@ class UserTableSeeder extends Seeder
      * @return void
      */
     public function run() {
-        DB::table('users')->insert([
-            //
-        ]);
+        \App\Models\User::factory(5)->create();
     }
 }

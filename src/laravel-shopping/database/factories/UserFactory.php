@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
-    protected static $idcounter = 2;
     protected static $namecounter = 2;
     protected static $emailcounter = 1234;
     
@@ -22,11 +21,10 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'id' => self::$idcounter++,
-            'name' => 'テストTEST0' . self::$namecounter++, // 名前を連番にする
-            'email' => 'test@ ' . self::$emailcounter++ . ' email.com',
-            'email_verified_at' => null,
-            'password' => fake()->password(),
+'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'), // デフォルトのパスワード
             'remember_token' => Str::random(10),
         ];
     }
