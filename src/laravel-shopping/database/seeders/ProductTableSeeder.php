@@ -17,16 +17,10 @@ class ProductTableSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Product::factory(16)->create();
-        
-        $images = File::files(public_path('img'));
+        $images = File::files(public_path('img/products'));
 
         foreach ($images as $image) {
-            Product::create([
-                'name' => pathinfo($image->getFilename(), PATHINFO_FILENAME),
-                'path' => 'img/' . $image->getFilename(),
-                'price' => random_int(1000, 100000), // Adding the price field
-            ]);
+            Product::factory()->create(['path' => $image]);
         }
     }
 }
