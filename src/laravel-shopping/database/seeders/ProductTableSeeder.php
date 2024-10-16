@@ -15,12 +15,14 @@ class ProductTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
-    {
-        $images = File::files(public_path('img/products'));
+    public function run() {
+        \App\Models\Product::factory(16)->create();
 
+        $images = File::files(public_path('img'));
+
+        $paths = [];
         foreach ($images as $image) {
-            Product::factory()->create(['path' => $image]);
+            $paths[] = 'img/products/' . $image->getFilename();
         }
     }
 }
