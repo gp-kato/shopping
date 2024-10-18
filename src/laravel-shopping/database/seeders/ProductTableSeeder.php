@@ -16,8 +16,6 @@ class ProductTableSeeder extends Seeder
      * @return void
      */
     public function run() {
-        $products = \App\Models\Product::factory(16)->create();
-
         // プロダクト画像のパスを取得
         $imagePaths = collect(File::files(public_path('img/products')))
             ->map(function ($image) {
@@ -25,11 +23,13 @@ class ProductTableSeeder extends Seeder
             })
             ->all();
 
-        // 製品に画像パスを関連付け
-        $products->each(function ($product, $index) use ($imagePaths) {
-            if (isset($imagePaths[$index])) {
-                $product->update(['path' => $imagePaths[$index]]);
-            }
-        });
+
+        // 画像の数だけ製品データを生成
+        foreach ($imagePaths as $imagePath) {
+            // Factoryを使って製品データを生成し、画像パスを追加
+            Product::factory()->create([
+                'path' => $imagePath,
+            ]);
+        }
     }
 }
