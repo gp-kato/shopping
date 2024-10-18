@@ -18,18 +18,18 @@ class ProductTableSeeder extends Seeder
     public function run() {
         $products = \App\Models\Product::factory(16)->create();
 
-        $images = File::files(public_path('img/products'));
+        // プロダクト画像のパスを取得
+        $imagePaths = collect(File::files(public_path('img/products')))
+            ->map(function ($image) {
+                return 'img/products/' . $image->getFilename();
+            })
+            ->all();
 
-        $paths = [];
-        foreach ($images as $image) {
-            $paths[] = 'img/products/' . $image->getFilename();
-        }
-
-        foreach ($products as $index => $product) {
-            // パスがある場合は、製品に画像を関連付ける
-            if (isset($paths[$index])) {
-                $product->update(['path' => $paths[$index]]);
+        // 製品に画像パスを関連付け
+        $products->each(function ($product, $index) use ($imagePaths) {
+            if (isset($imagePaths[$index])) {
+                $product->update(['path' => $imagePaths[$index]]);
             }
-        }
+        });
     }
 }
