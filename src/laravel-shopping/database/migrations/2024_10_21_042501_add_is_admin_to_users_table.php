@@ -14,7 +14,7 @@ return new class extends Migration
     public function up() {
         Schema::table('users', function (Blueprint $table) {
             // true/falseの論理を使用する場合、booleanを使用します
-            $table->boolean('is_admin')->default(false);
+            $table->boolean('is_admin')->default(false)->after('name');
         });
     }
 
