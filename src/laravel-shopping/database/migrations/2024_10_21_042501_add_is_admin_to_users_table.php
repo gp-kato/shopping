@@ -13,11 +13,8 @@ return new class extends Migration
      */
     public function up() {
         Schema::table('users', function (Blueprint $table) {
-            // 小さな整数(0または1)を使用する場合、tinyIntegerを使用します
-            $table->tinyInteger('is_admin')->default(0);
-            
-            // または、true/falseの論理を表現する場合、booleanを使用することもできます
-            // $table->boolean('is_admin')->default(false);
+            // true/falseの論理を使用する場合、booleanを使用します
+            $table->boolean('is_admin')->default(false);
         });
     }
 
