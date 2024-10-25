@@ -16,7 +16,7 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->is_admin !== 'admin') {
+        if (auth()->user()->is_admin === '1') {
             return redirect('/');  // 管理者以外はリダイレクト
         }
         return $next($request);

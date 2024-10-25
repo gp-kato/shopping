@@ -9,11 +9,11 @@ class AdminController extends Controller
 {
     public function admin() {
         $products = Product::all();
-        return view('admin.dashboard');
+        return view('admin.dashboard', ['products' => $products]);
     }
 
     public function create() {
-        return view('products.create');
+        return view('create');
     }
 
     public function store(Request $request) {
@@ -25,7 +25,7 @@ class AdminController extends Controller
 
         Product::create($request->all());
 
-        return redirect()->route('products.index')
+        return redirect()->route('/')
         ->with('success', 'Product created successfully.');
     }
 }

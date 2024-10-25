@@ -15,7 +15,7 @@ class ProductController extends Controller
     }
 
     public function product() {
-        $products = Product::paginate(8); // 1ページあたり12個の製品を取得
+        $products = Product::paginate(8); // 1ページあたり8個の製品を取得
         return view('index', ['products' => $products]);
     }
 
