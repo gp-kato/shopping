@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'admin'])->name('admin');
     Route::resource('products', AdminController::class);
+    Route::post('/store', [AdminController::class, 'store'])->name('products.store');
 });
 
 require __DIR__.'/auth.php';

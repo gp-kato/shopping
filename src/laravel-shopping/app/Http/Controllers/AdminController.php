@@ -13,19 +13,24 @@ class AdminController extends Controller
     }
 
     public function create() {
-        return view('create');
+        return view('admin.create');
     }
 
     public function store(Request $request) {
-        $request->validate([
-            'name' => 'required',
+        $validated = $request->validate([
+            'name' => 'required|string|max:16',
+            'path' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
             'price' => 'required|numeric',
-            'quantity' => 'required|integer',
         ]);
 
-        Product::create($request->all());
+        // 画像ファイルを保存し、そのパスを取得
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('products', 'img');
+        }
 
-        return redirect()->route('/')
+        Product::create($validated);
+
+        return redirect()->route('index')
         ->with('success', 'Product created successfully.');
     }
 }
