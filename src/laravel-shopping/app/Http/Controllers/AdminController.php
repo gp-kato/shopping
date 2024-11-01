@@ -30,7 +30,7 @@ class AdminController extends Controller
             // データベース保存用にパスを加工
             $validated['path'] = 'storage/' . $path;
         }
-        Product::create($request->all());
+        Product::create($validated);
 
         return redirect()->route('index')
         ->with('success', 'Product created successfully.');
