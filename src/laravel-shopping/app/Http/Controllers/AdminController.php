@@ -23,12 +23,14 @@ class AdminController extends Controller
             'price' => 'required|numeric',
         ]);
 
-        // 画像ファイルを保存し、そのパスを取得
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('products', 'img');
+        // inputのnameに合わせて、image → path に修正(以降も同様に修正)
+        if ($request->hasFile('path')) {
+            // 画像ファイルをstorage/app/public/uploadsに保存し、パスを取得
+            $path = $request->file('path')->store('uploads', 'public');
+            // データベース保存用にパスを加工
+            $validated['path'] = 'storage/' . $path;
         }
-
-        Product::create($validated);
+        Product::create($request->all());
 
         return redirect()->route('index')
         ->with('success', 'Product created successfully.');
