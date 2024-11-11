@@ -16,7 +16,7 @@
                         </ul>
                     </div>
                 @endif
-                <form action="{{ route('products.update', $product->id) }}" method="POST">
+                <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="mb-3">
@@ -29,7 +29,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="img " class="form-label">画像</label>
-                        <input type="file" name="image" id="image" class="form-control">
+                        <input type="file" name="path" id="image" class="form-control">
                         @if ($product->image)
                             <img src="{{ Storage::url($product->image) }}" alt="Current image" class="mt-3" width="150">
                         @endif

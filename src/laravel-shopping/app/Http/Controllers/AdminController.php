@@ -55,8 +55,9 @@ class AdminController extends Controller
 
         // 新しい画像がアップロードされた場合のみ処理
         if ($request->hasFile('path')) {
-            $imagePath = $request->file('path')->store('uploads', 'public');
-            $product->path = $imagePath;
+            $path = $request->file('path')->store('uploads', 'public');
+            $product->path = $path;
+            $product['path'] = 'storage/' . $path;
         }
 
         $product->save();
