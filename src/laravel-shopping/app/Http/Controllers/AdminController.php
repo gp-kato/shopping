@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
 
 class AdminController extends Controller
@@ -49,26 +48,19 @@ class AdminController extends Controller
             'path' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $product = Product::findOrFail($id);
+        $product = Product::findOrFail($id); // ここで$productを取得
 
+        // name と price を更新
+        $product->fill($request->only(['name', 'price']));
+
+        // 新しい画像がアップロードされた場合のみ処理
         if ($request->hasFile('path')) {
-            // 古い画像がある場合、削除する
-            if ($product->path) {
-                try {
-                    Storage::delete($product->path);
-                } catch (\Exception $e) {
-                    return redirect()->back()->withErrors('Image deletion failed.');
-                }
-            }
-            // 新しい画像を保存してパスを取得する
-            $path = $request->file('path')->store('public/uploads');
-            $product->path = $path;
+            $imagePath = $request->file('path')->store('uploads', 'public');
+            $product->path = $imagePath;
         }
-    
-        $product->name = $request->input('name');
-        $product->price = $request->input('price');
+
         $product->save();
     
-        return redirect()->route('index')->with('success', 'Product updated successfully.');
+        return redirect()->route('index', compact('product'))->with('success', 'Product updated successfully.');
     }
 }
