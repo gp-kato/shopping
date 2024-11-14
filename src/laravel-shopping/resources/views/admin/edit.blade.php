@@ -25,13 +25,13 @@
                     </div>
                     <div class="mb-3">
                         <label for="price" class="form-label">価格</label>
-                        <input type="number" name="price" id="price" class="form-control" step="0.01" value="{{ old('price', $product->price) }}" required>
+                        <input type="number" name="price" id="price" class="form-control" step="1" value="{{ old('price', $product->price) }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="img " class="form-label">画像</label>
                         <input type="file" name="path" id="image" class="form-control">
-                        @if ($product->image)
-                            <img src="{{ Storage::url($product->image) }}" alt="Current image" class="mt-3" width="150">
+                        @if ($product->path)
+                            <img src="{{ url($product->path) }}" alt="現在の画像" class="mt-3" width="150">
                         @endif
                     </div>
                     <button type="submit" class="btn btn-primary">商品を更新</button>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
 
 class AdminController extends Controller
@@ -17,23 +18,15 @@ class AdminController extends Controller
     }
 
     public function store(Request $request) {
-        $validated = $request->validate([
-            'name' => 'required|string|max:16',
-            'path' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
-            'price' => 'required|numeric',
-        ]);
+        // 新規作成時には画像が必須
+        $validatedData = $this->validateProduct($request, isUpdate: false);
 
-        // inputのnameに合わせて、image → path に修正(以降も同様に修正)
         if ($request->hasFile('path')) {
-            // 画像ファイルをstorage/app/public/uploadsに保存し、パスを取得
-            $path = $request->file('path')->store('uploads', 'public');
-            // データベース保存用にパスを加工
-            $validated['path'] = 'storage/' . $path;
+            $validatedData['path'] = $this->storeImage($request->file('path'));
         }
         Product::create($validated);
 
-        return redirect()->route('index')
-        ->with('success', 'Product created successfully.');
+        return redirect()->route('admin')->with('success', 'Product created successfully.');
     }
 
     public function edit($id) {
@@ -42,26 +35,43 @@ class AdminController extends Controller
     }
 
     public function update(Request $request, $id) {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'path' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
         $product = Product::findOrFail($id); // ここで$productを取得
+
+        // 更新時には画像は任意
+        $validatedData = $this->validateProduct($request, isUpdate: true);
 
         // name と price を更新
         $product->fill($request->only(['name', 'price']));
 
         // 新しい画像がアップロードされた場合のみ処理
         if ($request->hasFile('path')) {
-            $path = $request->file('path')->store('uploads', 'public');
-            $product->path = $path;
-            $product['path'] = 'storage/' . $path;
+            // 既存の画像がある場合、削除
+            if ($product->path) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $product->path));
+            }
+            $validatedData['path'] = $this->storeImage($request->file('path'));
         }
 
         $product->save();
     
-        return redirect()->route('index', compact('product'))->with('success', 'Product updated successfully.');
+        return redirect()->route('admin', compact('product'))->with('success', 'Product updated successfully.');
+    }
+
+    private function validateProduct(Request $request, bool $isUpdate = false) {
+        $rules = [
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+        ];
+
+        // 更新時のみ画像は任意、作成時には画像が必須
+        $rules['path'] = $isUpdate 
+            ? 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048' 
+            : 'required|file|mimes:jpeg,png,jpg,gif|max:2048';
+
+        return $request->validate($rules);
+    }
+
+    private function storeImage($image) {
+        return 'storage/' . $image->store('uploads', 'public');
     }
 }
