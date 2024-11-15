@@ -4,6 +4,12 @@
 
 @section('content')
     <div class="content wrapper">
+        {{-- 成功メッセージの表示 --}}
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
         <ul class="product-list">
             <li>
                 <h1>Product List</h1>
