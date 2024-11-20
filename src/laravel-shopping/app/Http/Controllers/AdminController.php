@@ -18,11 +18,17 @@ class AdminController extends Controller
     }
 
     public function store(Request $request) {
-        // 新規作成時には画像が必須
-        $validatedData = $this->validateProduct($request, isUpdate: false);
+        $validated = $request->validate([
+            'name' => 'required|string|max:16',
+            'path' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
+            'price' => 'required|numeric',
+        ]);
 
         if ($request->hasFile('path')) {
-            $validatedData['path'] = $this->storeImage($request->file('path'));
+            // 画像ファイルをstorage/app/public/uploadsに保存し、パスを取得
+            $path = $request->file('path')->store('uploads', 'public');
+            // データベース保存用にパスを加工
+            $validated['path'] = 'storage/' . $path;
         }
         Product::create($validated);
 
@@ -30,15 +36,18 @@ class AdminController extends Controller
     }
 
     public function edit($id) {
-        $product = Product::findOrFail($id);
+        $product = Product::find($id);
         return view('admin.edit', compact('product'));
     }
 
     public function update(Request $request, $id) {
-        $product = Product::findOrFail($id); // ここで$productを取得
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'path' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-        // 更新時には画像は任意
-        $validatedData = $this->validateProduct($request, isUpdate: true);
+        $product = Product::find($id); // ここで$productを取得
 
         // name と price を更新
         $product->fill($request->only(['name', 'price']));
@@ -49,29 +58,12 @@ class AdminController extends Controller
             if ($product->path) {
                 Storage::disk('public')->delete(str_replace('storage/', '', $product->path));
             }
-            $validatedData['path'] = $this->storeImage($request->file('path'));
+            $path = $request->file('path')->store('uploads', 'public');
+            $product->path =  'storage/' . $path;
         }
 
         $product->save();
     
         return redirect()->route('admin', compact('product'))->with('success', 'Product updated successfully.');
-    }
-
-    private function validateProduct(Request $request, bool $isUpdate = false) {
-        $rules = [
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-        ];
-
-        // 更新時のみ画像は任意、作成時には画像が必須
-        $rules['path'] = $isUpdate 
-            ? 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048' 
-            : 'required|file|mimes:jpeg,png,jpg,gif|max:2048';
-
-        return $request->validate($rules);
-    }
-
-    private function storeImage($image) {
-        return 'storage/' . $image->store('uploads', 'public');
     }
 }
