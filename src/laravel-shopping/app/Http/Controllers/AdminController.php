@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
 
+$product = new Product();
+
 class AdminController extends Controller
 {
     public function admin() {
@@ -35,19 +37,16 @@ class AdminController extends Controller
         return redirect()->route('admin')->with('success', 'Product created successfully.');
     }
 
-    public function edit($id) {
-        $product = Product::find($id);
+    public function edit(Product $product) {
         return view('admin.edit', compact('product'));
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, Product $product) {
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'path' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
-        $product = Product::find($id); // ここで$productを取得
 
         // name と price を更新
         $product->fill($request->only(['name', 'price']));
