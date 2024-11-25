@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
 
-$product = new Product();
-
 class AdminController extends Controller
 {
     public function admin() {
@@ -64,5 +62,13 @@ class AdminController extends Controller
         $product->save();
     
         return redirect()->route('admin', compact('product'))->with('success', 'Product updated successfully.');
+    }
+
+    public function destroy(Product $product) {
+        $product->delete();
+        if ($product->path) {
+            Storage::disk('public')->delete(str_replace('storage/', '', $product->path));
+        }
+        return redirect('admin');
     }
 }
