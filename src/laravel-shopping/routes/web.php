@@ -34,8 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/purchase', [CartController::class, 'purchase'])->name('purchase');    
 });
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin', [AdminController::class, 'admin'])->name('admin');
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'admin'])->name('admin');
     Route::resource('products', AdminController::class);
 });
 

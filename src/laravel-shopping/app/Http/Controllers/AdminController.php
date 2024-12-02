@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
+use App\Http\Requests\AddProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 
 class AdminController extends Controller
 {
@@ -17,12 +19,9 @@ class AdminController extends Controller
         return view('admin.create');
     }
 
-    public function store(Request $request) {
-        $validated = $request->validate([
-            'name' => 'required|string|max:16',
-            'path' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
-            'price' => 'required|numeric',
-        ]);
+    public function store(AddProductRequest $request) {
+        $validated = $request->validated();
+
 
         if ($request->hasFile('path')) {
             // 画像ファイルをstorage/app/public/uploadsに保存し、パスを取得
@@ -39,12 +38,8 @@ class AdminController extends Controller
         return view('admin.edit', compact('product'));
     }
 
-    public function update(Request $request, Product $product) {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'path' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+    public function update(UpdateProductRequest $request, Product $product) {
+        $request->validated();
 
         // name と price を更新
         $product->fill($request->only(['name', 'price']));
