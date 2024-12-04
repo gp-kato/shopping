@@ -18,4 +18,16 @@ class UpdateProductRequest extends FormRequest
             'path' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes() {
+        return [
+            'name' => '商品名',
+            'path' => '画像',
+        ];
+    }
 }

@@ -31,7 +31,7 @@
                         <label for="img ">画像</label>
                         <input type="file" name="path" id="path">
                         @if ($product->path)
-                            <img src="{{ url($product->path) }}" alt="現在の画像" width="150">
+                            <img src="{{ asset($product->path) }}" alt="現在の画像" width="150">
                         @endif
                     </div>
                     <button type="submit">商品を更新</button>

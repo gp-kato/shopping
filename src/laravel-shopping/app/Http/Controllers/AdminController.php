@@ -11,6 +11,9 @@ use App\Http\Requests\UpdateProductRequest;
 class AdminController extends Controller
 {
     public function admin() {
+    }
+
+    public function index() {
         $products = Product::all();
         return view('admin.dashboard', ['products' => $products]);
     }
@@ -31,7 +34,7 @@ class AdminController extends Controller
         }
         Product::create($validated);
 
-        return redirect()->route('admin')->with('success', 'Product created successfully.');
+        return redirect()->route('index')->with('success', 'Product created successfully.');
     }
 
     public function edit(Product $product) {
@@ -56,7 +59,7 @@ class AdminController extends Controller
 
         $product->save();
     
-        return redirect()->route('admin', compact('product'))->with('success', 'Product updated successfully.');
+        return redirect()->route('index', compact('product'))->with('success', 'Product updated successfully.');
     }
 
     public function destroy(Product $product) {
