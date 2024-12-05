@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/{product}', [CartController::class, 'add'])->name('add');
     Route::delete('/cart/{product}', [CartController::class, 'remove'])->name('remove');
     Route::post('/purchase', [CartController::class, 'purchase'])->name('purchase');    
+});
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('index');
+    Route::resource('products', AdminController::class);
 });
 
 require __DIR__.'/auth.php';
