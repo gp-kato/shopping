@@ -27,6 +27,7 @@ class UpdateProductRequest extends FormRequest
     public function attributes() {
         return [
             'name' => '商品名',
+            'price' => '価格',
             'path' => '画像',
         ];
     }

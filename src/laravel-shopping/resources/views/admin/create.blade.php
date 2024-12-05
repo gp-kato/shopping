@@ -20,7 +20,7 @@
                     @csrf
                     <div>
                         <label for="name">商品名</label>
-                        <input type="text" name="name" id="name" required>
+                        <input type="text" name="name" id="name" value="{{ old('name', $product->name) }}" required>
                     </div>
                     <div>
                         <label for="price">価格</label>
@@ -28,7 +28,7 @@
                     </div>
                     <div>
                         <label for="path">画像</label>
-                        <input type="file" name="path" id="path" required>
+                        <input type="file" name="path" id="path" value="{{ old('price', $product->price) }}" required>
                     </div>
                     <button type="submit">商品を入荷</button>
                 </form>
